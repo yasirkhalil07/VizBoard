@@ -1,2 +1,5 @@
-export { authMiddleware } from './authMiddleware';
-export { errorHandler } from './errorHandler';
+import { validateToken } from "./auth.middleware";
+import { errorHandler } from "./errorHandler";
+import { validate } from "./validate.middleware";
+
+export { validateToken, errorHandler, validate };
