@@ -1,17 +1,21 @@
-import fs from "fs";
+import dotenv from "dotenv";
+
+// Load environment variables FIRST, before any other imports
+dotenv.config();
+
 import express from "express";
 import { errorHandler } from "./src/middleware";
 import routes from "./src/routes";
 import morgan from "morgan";
 import { config } from "./src/config/env";
-import dotenv from "dotenv";
-dotenv.config();
+import cookieParser from "cookie-parser";
 
 const app = express() as express.Application;
 const port = config.port;
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(":method :url :status - :response-time ms"));
 

@@ -132,6 +132,14 @@ exports.Prisma.UserScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.RefreshTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  user_id: 'user_id',
+  created_at: 'created_at',
+  expires_at: 'expires_at'
+};
+
 exports.Prisma.DataConnectionScalarFieldEnum = {
   id: 'id',
   connection_name: 'connection_name',
@@ -213,6 +221,7 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   Role: 'Role',
   User: 'User',
+  RefreshToken: 'RefreshToken',
   DataConnection: 'DataConnection',
   Dashboard: 'Dashboard',
   DashboardAccess: 'DashboardAccess',
