@@ -4,11 +4,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
-import { errorHandler } from "./src/middleware";
+import * as middleware from "./src/middleware";
 import routes from "./src/routes";
 import morgan from "morgan";
 import { config } from "./src/config/env";
 import cookieParser from "cookie-parser";
+/// <reference path="./src/types/express.d.ts" />
 
 const app = express() as express.Application;
 const port = config.port;
@@ -19,11 +20,18 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(":method :url :status - :response-time ms"));
 
-// Routes
-app.use("/api", routes);
+// Auth Routes (Public)
+app.use("/api/auth", routes.authRoutes);
+
+// Protected Routes
+// Dashboard
+app.use("/api/dashboards", routes.dashboardRoutes);
+
+// Tab - All CRUD operations under dashboard context
+app.use("/api/dashboards/:id/tabs", routes.tabRoutes);
 
 // Error handling
-app.use(errorHandler);
+app.use(middleware.errorHandler);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

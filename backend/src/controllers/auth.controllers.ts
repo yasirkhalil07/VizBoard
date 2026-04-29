@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as services from "../services";
 
-// POST /api/register
+// POST /api/auth/register
 export const register = async (req: Request, res: Response) => {
   try {
     const user = await services.authService.registerUser(req.body);
@@ -18,7 +18,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// POST /api/login
+// POST /api/auth/login
 export const login = async (req: Request, res: Response) => {
   try {
     const { user, accessToken, refreshToken } =
@@ -42,8 +42,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-// POST /api/logout
-// POST /api/logout
+// POST /api/auth/logout
 export const logout = async (req: Request, res: Response) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -71,7 +70,7 @@ export const logout = async (req: Request, res: Response) => {
   }
 };
 
-// POST /api/refreshToken
+// POST /api/auth/refreshToken
 export const refreshToken = async (req: Request, res: Response) => {
   try {
     const refreshToken = req.cookies.refreshToken;

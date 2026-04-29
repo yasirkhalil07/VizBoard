@@ -19,7 +19,9 @@ It allows users (Admins & Clients) to:
 
 ### 🔐 Authentication & Roles
 
-- JWT-based authentication
+- JWT-based authentication with refresh tokens
+- Access tokens (15 min) + Refresh tokens (7 days)
+- Secure cookie-based refresh token storage
 - Roles:
   - Admin → Can create dashboards, connections, charts
   - Client → Can view assigned dashboards
@@ -131,7 +133,6 @@ Each chart stores dynamic config as JSON:
 - Next.js (TypeScript)
 - Tailwind CSS + ShadCN UI
 - Redux Toolkit (UI state)
-- TanStack Query (server state)
 - Zod (validation)
 - dnd-kit (drag & drop)
 
@@ -190,15 +191,40 @@ VizBoard/
 │   ├── 📄 package.json          # Dependencies & scripts
 │   ├── 📄 next.config.ts         # Next.js configuration
 │   ├── 📄 tailwind.config.js     # Tailwind CSS configuration
-│   ├── 📁 app/                   # App Router (Next.js 13+)
-│   ├── 📁 components/            # Reusable UI components
-│   ├── 📁 lib/                   # Utility libraries
+│   ├── 📄 tsconfig.json          # TypeScript configuration
+│   ├── � components.json        # ShadCN UI configuration
+│   ├── �📁 app/                   # App Router (Next.js 13+)
+│   │   ├── 📄 page.tsx          # Home page (dashboard listing)
+│   │   ├── 📁 auth/              # Authentication pages
+│   │   ├── 📁 dashboard/         # Dashboard layout wrapper
+│   │   │   └── 📄 layout.tsx    # Sidebar and header layout
+│   │   ├── 📄 layout.tsx        # Root layout
+│   │   └── � globals.css       # Global styles
 │   ├── 📁 public/                # Static assets
 │   └── 📁 src/                   # Source code
-│       ├── 📁 components/        # Feature components
-│       ├── 📁 hooks/             # Custom React hooks
+│       ├── 📁 components/        # All components
+│       │   ├── 📁 custom/         # Custom application components
+│       │   │   ├── 📄 DashboardCard.tsx
+│       │   │   ├── 📄 CreateDashboardCard.tsx
+│       │   │   └── 📄 Navbar.tsx
+│       │   ├── 📁 shared/        # Shared layout components
+│       │   │   ├── 📄 AppSidebar.tsx  # Collapsible sidebar with logout
+│       │   │   └── 📄 CollapsibleSidebar.tsx
+│       │   └── 📁 ui/            # ShadCN UI components
+│       │       ├── 📄 sidebar.tsx    # Sidebar components
+│       │       ├── 📄 tooltip.tsx    # Tooltip components
+│       │       ├── � button.tsx     # Button components
+│       │       └── ...              # Other UI components
+│       ├── �📁 hooks/             # Custom React hooks
 │       ├── 📁 store/             # Redux store configuration
-│       └── 📁 types/             # TypeScript types
+│       ├── 📁 types/             # TypeScript types
+│       ├── 📁 services/          # API services
+│       ├── 📁 utils/             # Utility functions
+│       ├── � config/            # Configuration files
+│       ├── � constants/         # Application constants
+│       ├── 📁 assets/            # Static assets
+│       └── 📁 lib/               # Utility libraries
+│           └── � utils.ts       # Utility functions
 │
 └── 📄 vizboard.md               # Project documentation
 ```
@@ -222,25 +248,27 @@ VizBoard/
     "@prisma/client": "^7.7.0",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "12.9.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1",
+    "express": "5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "morgan": "^1.10.1",
-    "multer": "^2.1.1",
-    "puppeteer": "^24.41.0",
-    "winston": "^3.19.0",
-    "zod": "^4.3.6"
+    "morgan": "1.10.1",
+    "multer": "2.1.1",
+    "puppeteer": "24.41.0",
+    "winston": "3.19.0",
+    "zod": "4.3.6"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/morgan": "^1.9.10",
-    "@types/multer": "^2.1.0",
-    "@types/node": "^25.6.0",
+    "@types/morgan": "1.9.10",
+    "@types/multer": "2.1.0",
+    "@types/node": "25.6.0",
     "prisma": "^7.7.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^6.0.3"
+    "ts-node": "10.9.2",
+    "typescript": "6.0.3"
   }
 }
 ```
@@ -262,16 +290,14 @@ VizBoard/
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@reduxjs/toolkit": "^2.11.2",
+    "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "csv-parser": "^3.2.0",
     "lucide-react": "^1.8.0",
     "next": "16.2.4",
     "react": "19.2.4",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "19.2.4",
-    "react-dropzone": "^15.0.0",
     "react-redux": "^9.2.0",
     "shadcn": "^4.4.0",
     "tailwind-merge": "^3.5.0",
@@ -426,6 +452,20 @@ CREATE TABLE chart_data_sources (
 );
 ```
 
+### 🔄 Refresh Tokens
+
+```sql
+CREATE TABLE refresh_tokens (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  token TEXT UNIQUE NOT NULL, -- Hashed refresh token
+  user_id INTEGER NOT NULL,
+  expires_at DATETIME NOT NULL,
+  revoked BOOLEAN DEFAULT FALSE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
 ---
 
 ## 🔗 Database Relationships
@@ -438,6 +478,7 @@ CREATE TABLE chart_data_sources (
 - **Chart → Data Source** (1:1) - Each chart has exactly one data source
 - **Data Source → File OR Connection** (Polymorphic) - Data source can be either a file or DB connection
 - **Dashboard ↔ Users** (M:M) - Dashboards can be shared with multiple users via dashboard_access
+- **User → Refresh Tokens** (1:M) - Users can have multiple refresh tokens
 
 ### 🎯 Key Design Patterns
 
@@ -454,8 +495,9 @@ CREATE TABLE chart_data_sources (
 ### 🔐 Authentication
 
 - `POST /api/register` - Register new user
-- `POST /api/login` - User login
-- `POST /api/logout` - User logout
+- `POST /api/login` - User login (returns access token + sets refresh token cookie)
+- `POST /api/logout` - User logout (clears refresh token)
+- `POST /api/refreshToken` - Refresh access token using refresh token
 
 ### 📊 Dashboard Management
 
