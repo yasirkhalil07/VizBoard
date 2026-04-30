@@ -27,8 +27,12 @@ app.use("/api/auth", routes.authRoutes);
 // Dashboard
 app.use("/api/dashboards", routes.dashboardRoutes);
 
-// Tab - All CRUD operations under dashboard context
+//  TAB
 app.use("/api/dashboards/:id/tabs", routes.tabRoutes);
+
+//  CHARTS
+app.use("/api/tabs/:id/charts", routes.tabChartRouter);
+app.use("/api/charts", routes.chartRouter);
 
 // Error handling
 app.use(middleware.errorHandler);

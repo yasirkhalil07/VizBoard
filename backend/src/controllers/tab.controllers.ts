@@ -47,7 +47,7 @@ export const createTab = async (req: Request, res: Response) => {
         .json({ message: "Dashboard not found or access denied" });
     }
 
-    res.status(201).json({ tab });
+    res.status(200).json({ tab });
   } catch (error) {
     res.status(500).json({ message: "Failed to create tab" });
   }

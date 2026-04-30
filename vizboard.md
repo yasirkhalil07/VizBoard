@@ -109,11 +109,88 @@ Libraries:
 Each chart stores dynamic config as JSON:
 
 ```json
+***BAR***
 {
-  "xAxis": "student",
-  "yAxis": "fees",
-  "aggregation": "sum",
-  "table": "students"
+  "name": "Sales Chart",
+  "chartType": "bar",
+  "config": {
+    "data": {
+      "table": "sales",
+      "dimensions": ["month"],
+      "measures": [
+        {
+          "field": "revenue",
+          "aggregation": "sum"
+        }
+      ]
+    },
+    "visual": {
+      "xAxis": "month",
+      "yAxis": "revenue",
+      "title": "Monthly Sales",
+      "showLegend": true
+    }
+  },
+  "positionX": 0,
+  "positionY": 0,
+  "width": 400,
+  "height": 300
+}
+
+***PIE***
+{
+  "name": "Revenue by Category",
+  "chartType": "pie",
+  "config": {
+    "data": {
+      "table": "sales",
+      "dimensions": ["category"],
+      "measures": [
+        {
+          "field": "revenue",
+          "aggregation": "sum"
+        }
+      ]
+    },
+    "visual": {
+      "label": "category",
+      "value": "revenue",
+      "title": "Revenue Distribution",
+      "showLegend": true
+    }
+  },
+  "positionX": 0,
+  "positionY": 0,
+  "width": 400,
+  "height": 300
+}
+
+***LINE***
+{
+  "name": "Sales Trend",
+  "chartType": "line",
+  "config": {
+    "data": {
+      "table": "sales",
+      "dimensions": ["date"],
+      "measures": [
+        {
+          "field": "revenue",
+          "aggregation": "sum"
+        }
+      ]
+    },
+    "visual": {
+      "xAxis": "date",
+      "yAxis": "revenue",
+      "title": "Sales Over Time",
+      "showLegend": true
+    }
+  },
+  "positionX": 0,
+  "positionY": 0,
+  "width": 500,
+  "height": 300
 }
 ```
 
@@ -133,8 +210,11 @@ Each chart stores dynamic config as JSON:
 - Next.js (TypeScript)
 - Tailwind CSS + ShadCN UI
 - Redux Toolkit (UI state)
+- ECharts (data visualization)
 - Zod (validation)
 - dnd-kit (drag & drop)
+- React DnD (advanced drag & drop)
+- React Dropzone (file uploads)
 
 ---
 
@@ -290,14 +370,21 @@ VizBoard/
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@reduxjs/toolkit": "^2.11.2",
-    "@radix-ui/react-slot": "^1.0.2",
+    "autoprefixer": "^10.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "csv-parser": "^3.2.0",
+    "echarts": "^6.0.0",
+    "echarts-for-react": "^3.0.6",
     "lucide-react": "^1.8.0",
     "next": "16.2.4",
+    "postcss": "^8.5.10",
+    "radix-ui": "^1.4.3",
     "react": "19.2.4",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "19.2.4",
+    "react-dropzone": "^15.0.0",
     "react-redux": "^9.2.0",
     "shadcn": "^4.4.0",
     "tailwind-merge": "^3.5.0",
@@ -494,10 +581,10 @@ CREATE TABLE refresh_tokens (
 
 ### 🔐 Authentication
 
-- `POST /api/register` - Register new user
-- `POST /api/login` - User login (returns access token + sets refresh token cookie)
-- `POST /api/logout` - User logout (clears refresh token)
-- `POST /api/refreshToken` - Refresh access token using refresh token
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login (returns access token + sets refresh token cookie)
+- `POST /api/auth/logout` - User logout (clears refresh token)
+- `POST /api/auth/refreshToken` - Refresh access token using refresh token
 
 ### 📊 Dashboard Management
 
@@ -510,8 +597,8 @@ CREATE TABLE refresh_tokens (
 
 - `GET /api/dashboards/:id/tabs` - List dashboard tabs
 - `POST /api/dashboards/:id/tabs` - Create tab
-- `PUT /api/tabs/:id` - Update tab
-- `DELETE /api/tabs/:id` - Delete tab
+- `PUT /api/dashboards/tabs/:id` - Update tab
+- `DELETE /api/dashboards/tabs/:id` - Delete tab
 
 ### 📈 Chart Management
 
@@ -519,6 +606,12 @@ CREATE TABLE refresh_tokens (
 - `POST /api/tabs/:id/charts` - Create chart
 - `PUT /api/charts/:id` - Update chart
 - `DELETE /api/charts/:id` - Delete chart
+
+### 📊 Data Source (IMPORTANT - matches your schema) extends chart managment apis
+
+- `POST /api/charts/:id/data-source` - Attach file/db source
+- `PUT /api/charts/:id/data-source` - Update source
+- `GET /api/charts/:id/data-source` - Get source
 
 ### 🔌 Data Connections
 
@@ -528,12 +621,22 @@ CREATE TABLE refresh_tokens (
 - `DELETE /api/connections/:id` - Delete connection
 - `POST /api/connections/:id/test` - Test connection
 
+### 📊 Database Connection Tables (IMPORTANT for charts)
+
+- `GET /api/connections/:id/tables` - Get tables (IMPORTANT for charts)
+- `GET /api/connections/:id/tables/:table` - Get columns
+
 ### 📂 File Management
 
 - `POST /api/files/upload` - Upload CSV/Excel file
 - `GET /api/files` - List user files
 - `GET /api/files/:id/preview` - Preview file data
 - `DELETE /api/files/:id` - Delete file
+
+### 📊 File Preview (IMPORTANT for charts)
+
+- `GET /api/files/:id/preview` - Preview rows (limit 50)
+- `GET /api/files/:id/columns` - Extract column names
 
 ### 📤 Export
 

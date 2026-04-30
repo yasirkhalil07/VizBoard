@@ -2,5 +2,13 @@
 import * as authController from "./auth.controllers";
 import * as dashboardController from "./dashboard.controllers";
 import * as tabController from "./tab.controllers";
+import * as dataSourceController from "./dataSource.controllers";
+import * as chartController from "./chart.controllers";
 
-export { authController, dashboardController, tabController };
+export {
+  authController,
+  dashboardController,
+  tabController,
+  dataSourceController,
+  chartController,
+};

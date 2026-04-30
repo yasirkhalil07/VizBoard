@@ -31,7 +31,7 @@ export const createDashboard = async (req: Request, res: Response) => {
       userId,
       parsed.data,
     );
-    res.status(201).json({ dashboard });
+    res.status(200).json({ dashboard });
   } catch (error) {
     res.status(500).json({ message: "Failed to create dashboard" });
   }
