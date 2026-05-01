@@ -1,17 +1,17 @@
 import { Router } from "express";
 import { chartController } from "../controllers";
 import { dataSourceController } from "../controllers";
-import { authenticate } from "../middleware";
+import * as middleware from "../middleware";
 
 // ── Chart routes (mounted at /api/tabs/:id/charts) ─────────
 const tabChartRouter: Router = Router({ mergeParams: true });
-tabChartRouter.use(authenticate);
+tabChartRouter.use(middleware.authenticate);
 tabChartRouter.get("/", chartController.getCharts);
 tabChartRouter.post("/", chartController.createChart);
 
 // ── Chart routes (mounted at /api/charts) ──────────────────
 const chartRouter: Router = Router();
-chartRouter.use(authenticate);
+chartRouter.use(middleware.authenticate);
 chartRouter.put("/:id", chartController.updateChart);
 chartRouter.delete("/:id", chartController.deleteChart);
 

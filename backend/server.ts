@@ -34,6 +34,9 @@ app.use("/api/dashboards/:id/tabs", routes.tabRoutes);
 app.use("/api/tabs/:id/charts", routes.tabChartRouter);
 app.use("/api/charts", routes.chartRouter);
 
+// Data Connections
+app.use("/api/connections", routes.connectionRoutes);
+
 // Error handling
 app.use(middleware.errorHandler);
 

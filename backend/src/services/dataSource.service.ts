@@ -25,7 +25,23 @@ export const attachDataSourceService = async (
     },
     include: {
       file: data.type === "file",
-      connection: data.type === "db",
+      connection:
+        data.type === "db"
+          ? {
+              select: {
+                id: true,
+                connection_name: true,
+                db_type: true,
+                host: true,
+                port: true,
+                username: true,
+                database_name: true,
+                created_at: true,
+                updated_at: true,
+                // Never include password
+              },
+            }
+          : false,
     },
   });
 };
@@ -53,7 +69,20 @@ export const updateDataSourceService = async (
     },
     include: {
       file: true,
-      connection: true,
+      connection: {
+        select: {
+          id: true,
+          connection_name: true,
+          db_type: true,
+          host: true,
+          port: true,
+          username: true,
+          database_name: true,
+          created_at: true,
+          updated_at: true,
+          // Never include password
+        },
+      },
     },
   });
 };
@@ -66,7 +95,20 @@ export const getDataSourceService = async (chartId: number, userId: number) => {
     where: { chart_id: chartId },
     include: {
       file: true,
-      connection: true,
+      connection: {
+        select: {
+          id: true,
+          connection_name: true,
+          db_type: true,
+          host: true,
+          port: true,
+          username: true,
+          database_name: true,
+          created_at: true,
+          updated_at: true,
+          // Never include password
+        },
+      },
     },
   });
 

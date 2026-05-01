@@ -4,6 +4,7 @@ import * as dashboardService from "./dashboard.service";
 import * as tabService from "./tab.service";
 import * as chartService from "./chart.service";
 import * as dataSourceService from "./dataSource.service";
+import * as connectionService from "./connection.service";
 
 export {
   authService,
@@ -11,4 +12,5 @@ export {
   tabService,
   chartService,
   dataSourceService,
+  connectionService,
 };

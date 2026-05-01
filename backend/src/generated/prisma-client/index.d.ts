@@ -5364,11 +5364,13 @@ export namespace Prisma {
   export type DataConnectionAvgAggregateOutputType = {
     id: number | null
     user_id: number | null
+    port: number | null
   }
 
   export type DataConnectionSumAggregateOutputType = {
     id: number | null
     user_id: number | null
+    port: number | null
   }
 
   export type DataConnectionMinAggregateOutputType = {
@@ -5377,6 +5379,7 @@ export namespace Prisma {
     user_id: number | null
     db_type: string | null
     host: string | null
+    port: number | null
     username: string | null
     password: string | null
     database_name: string | null
@@ -5390,6 +5393,7 @@ export namespace Prisma {
     user_id: number | null
     db_type: string | null
     host: string | null
+    port: number | null
     username: string | null
     password: string | null
     database_name: string | null
@@ -5403,6 +5407,7 @@ export namespace Prisma {
     user_id: number
     db_type: number
     host: number
+    port: number
     username: number
     password: number
     database_name: number
@@ -5415,11 +5420,13 @@ export namespace Prisma {
   export type DataConnectionAvgAggregateInputType = {
     id?: true
     user_id?: true
+    port?: true
   }
 
   export type DataConnectionSumAggregateInputType = {
     id?: true
     user_id?: true
+    port?: true
   }
 
   export type DataConnectionMinAggregateInputType = {
@@ -5428,6 +5435,7 @@ export namespace Prisma {
     user_id?: true
     db_type?: true
     host?: true
+    port?: true
     username?: true
     password?: true
     database_name?: true
@@ -5441,6 +5449,7 @@ export namespace Prisma {
     user_id?: true
     db_type?: true
     host?: true
+    port?: true
     username?: true
     password?: true
     database_name?: true
@@ -5454,6 +5463,7 @@ export namespace Prisma {
     user_id?: true
     db_type?: true
     host?: true
+    port?: true
     username?: true
     password?: true
     database_name?: true
@@ -5554,6 +5564,7 @@ export namespace Prisma {
     user_id: number
     db_type: string
     host: string
+    port: number
     username: string
     password: string
     database_name: string
@@ -5586,6 +5597,7 @@ export namespace Prisma {
     user_id?: boolean
     db_type?: boolean
     host?: boolean
+    port?: boolean
     username?: boolean
     password?: boolean
     database_name?: boolean
@@ -5602,6 +5614,7 @@ export namespace Prisma {
     user_id?: boolean
     db_type?: boolean
     host?: boolean
+    port?: boolean
     username?: boolean
     password?: boolean
     database_name?: boolean
@@ -5616,6 +5629,7 @@ export namespace Prisma {
     user_id?: boolean
     db_type?: boolean
     host?: boolean
+    port?: boolean
     username?: boolean
     password?: boolean
     database_name?: boolean
@@ -5630,6 +5644,7 @@ export namespace Prisma {
     user_id?: boolean
     db_type?: boolean
     host?: boolean
+    port?: boolean
     username?: boolean
     password?: boolean
     database_name?: boolean
@@ -5637,7 +5652,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type DataConnectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "connection_name" | "user_id" | "db_type" | "host" | "username" | "password" | "database_name" | "created_at" | "updated_at", ExtArgs["result"]["dataConnection"]>
+  export type DataConnectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "connection_name" | "user_id" | "db_type" | "host" | "port" | "username" | "password" | "database_name" | "created_at" | "updated_at", ExtArgs["result"]["dataConnection"]>
   export type DataConnectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     chart_data_sources?: boolean | DataConnection$chart_data_sourcesArgs<ExtArgs>
@@ -5662,6 +5677,7 @@ export namespace Prisma {
       user_id: number
       db_type: string
       host: string
+      port: number
       username: string
       password: string
       database_name: string
@@ -6097,6 +6113,7 @@ export namespace Prisma {
     readonly user_id: FieldRef<"DataConnection", 'Int'>
     readonly db_type: FieldRef<"DataConnection", 'String'>
     readonly host: FieldRef<"DataConnection", 'String'>
+    readonly port: FieldRef<"DataConnection", 'Int'>
     readonly username: FieldRef<"DataConnection", 'String'>
     readonly password: FieldRef<"DataConnection", 'String'>
     readonly database_name: FieldRef<"DataConnection", 'String'>
@@ -13499,6 +13516,7 @@ export namespace Prisma {
     user_id: 'user_id',
     db_type: 'db_type',
     host: 'host',
+    port: 'port',
     username: 'username',
     password: 'password',
     database_name: 'database_name',
@@ -13823,6 +13841,7 @@ export namespace Prisma {
     user_id?: IntFilter<"DataConnection"> | number
     db_type?: StringFilter<"DataConnection"> | string
     host?: StringFilter<"DataConnection"> | string
+    port?: IntFilter<"DataConnection"> | number
     username?: StringFilter<"DataConnection"> | string
     password?: StringFilter<"DataConnection"> | string
     database_name?: StringFilter<"DataConnection"> | string
@@ -13838,6 +13857,7 @@ export namespace Prisma {
     user_id?: SortOrder
     db_type?: SortOrder
     host?: SortOrder
+    port?: SortOrder
     username?: SortOrder
     password?: SortOrder
     database_name?: SortOrder
@@ -13856,6 +13876,7 @@ export namespace Prisma {
     user_id?: IntFilter<"DataConnection"> | number
     db_type?: StringFilter<"DataConnection"> | string
     host?: StringFilter<"DataConnection"> | string
+    port?: IntFilter<"DataConnection"> | number
     username?: StringFilter<"DataConnection"> | string
     password?: StringFilter<"DataConnection"> | string
     database_name?: StringFilter<"DataConnection"> | string
@@ -13871,6 +13892,7 @@ export namespace Prisma {
     user_id?: SortOrder
     db_type?: SortOrder
     host?: SortOrder
+    port?: SortOrder
     username?: SortOrder
     password?: SortOrder
     database_name?: SortOrder
@@ -13892,6 +13914,7 @@ export namespace Prisma {
     user_id?: IntWithAggregatesFilter<"DataConnection"> | number
     db_type?: StringWithAggregatesFilter<"DataConnection"> | string
     host?: StringWithAggregatesFilter<"DataConnection"> | string
+    port?: IntWithAggregatesFilter<"DataConnection"> | number
     username?: StringWithAggregatesFilter<"DataConnection"> | string
     password?: StringWithAggregatesFilter<"DataConnection"> | string
     database_name?: StringWithAggregatesFilter<"DataConnection"> | string
@@ -14474,6 +14497,7 @@ export namespace Prisma {
     connection_name: string
     db_type: string
     host: string
+    port?: number
     username: string
     password: string
     database_name: string
@@ -14489,6 +14513,7 @@ export namespace Prisma {
     user_id: number
     db_type: string
     host: string
+    port?: number
     username: string
     password: string
     database_name: string
@@ -14501,6 +14526,7 @@ export namespace Prisma {
     connection_name?: StringFieldUpdateOperationsInput | string
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string
@@ -14516,6 +14542,7 @@ export namespace Prisma {
     user_id?: IntFieldUpdateOperationsInput | number
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string
@@ -14530,6 +14557,7 @@ export namespace Prisma {
     user_id: number
     db_type: string
     host: string
+    port?: number
     username: string
     password: string
     database_name: string
@@ -14541,6 +14569,7 @@ export namespace Prisma {
     connection_name?: StringFieldUpdateOperationsInput | string
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string
@@ -14554,6 +14583,7 @@ export namespace Prisma {
     user_id?: IntFieldUpdateOperationsInput | number
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string
@@ -15199,6 +15229,7 @@ export namespace Prisma {
     user_id?: SortOrder
     db_type?: SortOrder
     host?: SortOrder
+    port?: SortOrder
     username?: SortOrder
     password?: SortOrder
     database_name?: SortOrder
@@ -15209,6 +15240,7 @@ export namespace Prisma {
   export type DataConnectionAvgOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
+    port?: SortOrder
   }
 
   export type DataConnectionMaxOrderByAggregateInput = {
@@ -15217,6 +15249,7 @@ export namespace Prisma {
     user_id?: SortOrder
     db_type?: SortOrder
     host?: SortOrder
+    port?: SortOrder
     username?: SortOrder
     password?: SortOrder
     database_name?: SortOrder
@@ -15230,6 +15263,7 @@ export namespace Prisma {
     user_id?: SortOrder
     db_type?: SortOrder
     host?: SortOrder
+    port?: SortOrder
     username?: SortOrder
     password?: SortOrder
     database_name?: SortOrder
@@ -15240,6 +15274,7 @@ export namespace Prisma {
   export type DataConnectionSumOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
+    port?: SortOrder
   }
 
   export type TabListRelationFilter = {
@@ -16549,6 +16584,7 @@ export namespace Prisma {
     connection_name: string
     db_type: string
     host: string
+    port?: number
     username: string
     password: string
     database_name: string
@@ -16562,6 +16598,7 @@ export namespace Prisma {
     connection_name: string
     db_type: string
     host: string
+    port?: number
     username: string
     password: string
     database_name: string
@@ -16717,6 +16754,7 @@ export namespace Prisma {
     user_id?: IntFilter<"DataConnection"> | number
     db_type?: StringFilter<"DataConnection"> | string
     host?: StringFilter<"DataConnection"> | string
+    port?: IntFilter<"DataConnection"> | number
     username?: StringFilter<"DataConnection"> | string
     password?: StringFilter<"DataConnection"> | string
     database_name?: StringFilter<"DataConnection"> | string
@@ -17648,6 +17686,7 @@ export namespace Prisma {
     connection_name: string
     db_type: string
     host: string
+    port?: number
     username: string
     password: string
     database_name: string
@@ -17662,6 +17701,7 @@ export namespace Prisma {
     user_id: number
     db_type: string
     host: string
+    port?: number
     username: string
     password: string
     database_name: string
@@ -17755,6 +17795,7 @@ export namespace Prisma {
     connection_name?: StringFieldUpdateOperationsInput | string
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string
@@ -17769,6 +17810,7 @@ export namespace Prisma {
     user_id?: IntFieldUpdateOperationsInput | number
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string
@@ -17833,6 +17875,7 @@ export namespace Prisma {
     connection_name: string
     db_type: string
     host: string
+    port?: number
     username: string
     password: string
     database_name: string
@@ -17888,6 +17931,7 @@ export namespace Prisma {
     connection_name?: StringFieldUpdateOperationsInput | string
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string
@@ -17901,6 +17945,7 @@ export namespace Prisma {
     connection_name?: StringFieldUpdateOperationsInput | string
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string
@@ -17914,6 +17959,7 @@ export namespace Prisma {
     connection_name?: StringFieldUpdateOperationsInput | string
     db_type?: StringFieldUpdateOperationsInput | string
     host?: StringFieldUpdateOperationsInput | string
+    port?: IntFieldUpdateOperationsInput | number
     username?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     database_name?: StringFieldUpdateOperationsInput | string

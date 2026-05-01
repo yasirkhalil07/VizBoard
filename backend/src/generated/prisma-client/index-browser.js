@@ -146,6 +146,7 @@ exports.Prisma.DataConnectionScalarFieldEnum = {
   user_id: 'user_id',
   db_type: 'db_type',
   host: 'host',
+  port: 'port',
   username: 'username',
   password: 'password',
   database_name: 'database_name',

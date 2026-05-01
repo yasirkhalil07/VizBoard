@@ -71,6 +71,7 @@ model DataConnection {
   user_id         Int
   db_type         String // "mysql" | "postgres"
   host            String
+  port            Int    @default(3306)
   username        String
   password        String
   database_name   String
