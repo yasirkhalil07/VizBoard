@@ -37,6 +37,9 @@ app.use("/api/charts", routes.chartRouter);
 // Data Connections
 app.use("/api/connections", routes.connectionRoutes);
 
+// Files upload
+app.use("/api/files", routes.fileRoutes);
+
 // Error handling
 app.use(middleware.errorHandler);
 

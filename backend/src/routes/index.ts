@@ -4,6 +4,7 @@ import dashboardRoutes from "./dashboard.routes";
 import tabRoutes from "./tabs.routes";
 import { chartRouter, tabChartRouter } from "./chart.routes";
 import connectionRoutes from "./connection.routes";
+import fileRoutes from "./file.routes";
 
 export default {
   authRoutes,
@@ -12,4 +13,5 @@ export default {
   chartRouter,
   tabChartRouter,
   connectionRoutes,
+  fileRoutes,
 } as const;

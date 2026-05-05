@@ -5,6 +5,7 @@ import * as tabController from "./tab.controllers";
 import * as dataSourceController from "./dataSource.controllers";
 import * as chartController from "./chart.controllers";
 import * as connectionController from "./connection.controllers";
+import * as fileController from "./file.controllers";
 
 export {
   authController,
@@ -13,4 +14,5 @@ export {
   dataSourceController,
   chartController,
   connectionController,
+  fileController,
 };
