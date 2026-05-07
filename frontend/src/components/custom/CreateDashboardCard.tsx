@@ -4,13 +4,13 @@ import { Card } from "@/components/ui/card";
 export const CreateDashboardCard = () => {
   return (
     <Card
-      className="group relative flex flex-col items-center justify-center h-64 border-2 border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/50 cursor-pointer transition-all duration-200"
+      className="group relative flex flex-col items-center justify-center h-64 border-2 border-dashed border-muted-foreground/30 hover:border-primary hover:bg-muted/50 cursor-pointer transition-all duration-200"
       onClick={() => console.log("Create new dashboard logic")}
     >
-      <div className="p-4 rounded-full bg-slate-100 group-hover:bg-blue-100 transition-colors">
-        <Plus className="w-8 h-8 text-slate-500 group-hover:text-blue-600" />
+      <div className="p-4 rounded-full bg-muted group-hover:bg-primary/10 transition-colors">
+        <Plus className="w-8 h-8 text-muted-foreground group-hover:text-primary" />
       </div>
-      <p className="mt-4 font-medium text-slate-600 group-hover:text-blue-700">
+      <p className="mt-4 font-medium text-muted-foreground group-hover:text-primary">
         Blank Dashboard
       </p>
     </Card>

@@ -39,7 +39,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-slate-200 bg-white">
       <SidebarHeader className="h-16 flex items-center px-4">
-        <div className="flex items-start mt-2 gap-3">
+        <div className="flex justify-start items-start mt-2 gap-3">
           <div className="bg-blue-600 p-2 rounded-lg shrink-0">
             <BarChart3 className="text-white w-5 h-5" />
           </div>

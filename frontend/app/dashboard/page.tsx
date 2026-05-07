@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CreateDashboardCard } from "@/components/custom/CreateDashboardCard";
 import { DashboardCard } from "@/components/custom/DashboardCard";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import { ConnectionModal } from "@/components/custom/ConnectionModal";
 export default function DashboardHomePage() {
   // const dispatch = useDispatch<AppDispatch>();
   // const { items, loading } = useSelector((state: RootState) => state.dashboards);
@@ -28,11 +28,19 @@ export default function DashboardHomePage() {
 
   return (
     <main className="p-8 max-w-7xl mx-auto">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Recent Reports</h1>
-        <p className="text-slate-500">
-          Manage and create your data visualizations
-        </p>
+      <header>
+        <div className="mb-8 flex justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">
+              Recent Reports
+            </h1>
+            <p className="text-muted-foreground">
+              Manage and create your data visualizations
+            </p>
+          </div>
+          {/* to be added next */}
+          <ConnectionModal />
+        </div>
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
