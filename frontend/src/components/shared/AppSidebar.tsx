@@ -23,6 +23,8 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import { LogOut } from "lucide-react";
 
 const navItems = [
   { name: "Dashboards", href: "/", icon: LayoutDashboard },
@@ -35,6 +37,15 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <Sidebar collapsible="icon" className="border-r border-slate-200 bg-white">
@@ -86,9 +97,13 @@ export function AppSidebar() {
       <SidebarFooter className="p-4 border-t border-slate-100">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Settings" className="text-slate-600">
-              <Settings className="w-5 h-5 text-slate-400" />
-              <span>Settings</span>
+            <SidebarMenuButton
+              tooltip="Logout"
+              className="text-slate-600 hover:text-red-600 cursor-pointer"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-5 h-5 text-slate-400" />
+              {!isCollapsed && <span>Logout</span>}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
