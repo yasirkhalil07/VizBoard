@@ -1,7 +1,3 @@
-import { store } from "@/store/store";
-import { setCredentials } from "@/store/slices/authSlice";
-import { authService } from "./authService";
-
 // ======================================================
 // TYPES
 // ======================================================
@@ -30,11 +26,6 @@ const onTokenRefreshed = (token: string) => {
   refreshSubscribers = [];
 };
 
-const getAccessToken = (): string | null => {
-  const state = store.getState();
-  return state.auth.accessToken;
-};
-
 // ======================================================
 // API FETCH WRAPPER
 // ======================================================
@@ -42,6 +33,8 @@ const getAccessToken = (): string | null => {
 export const apiFetch = async (
   url: string,
   options: ApiFetchOptions = {},
+  getAccessToken: () => string | null = () => null,
+  onTokenRefresh?: (user: any, accessToken: string) => void,
 ): Promise<Response> => {
   const { skipAuth = false, ...fetchOptions } = options;
 
@@ -101,46 +94,54 @@ export const apiFetch = async (
       isRefreshing = true;
 
       try {
-        // Call refresh endpoint
-        const refreshResponse = await authService.refreshToken();
-
-        // Save new token to Redux
-        store.dispatch(
-          setCredentials({
-            user: refreshResponse.user,
-            accessToken: refreshResponse.accessToken,
-          }),
+        // Call refresh endpoint directly
+        const refreshResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001"}/api/auth/refresh`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          },
         );
 
-        // Notify all subscribers
-        onTokenRefreshed(refreshResponse.accessToken);
+        if (refreshResponse.ok) {
+          const refreshData = await refreshResponse.json();
 
-        // Retry original request with new token
-        const retryHeaders = new Headers(fetchOptions.headers);
-        if (fetchOptions.body && !retryHeaders.has("Content-Type")) {
-          if (fetchOptions.body instanceof FormData) {
-            // Don't set Content-Type for FormData
-          } else {
-            retryHeaders.set("Content-Type", "application/json");
+          // Call the callback to update the store
+          if (onTokenRefresh) {
+            onTokenRefresh(refreshData.user, refreshData.accessToken);
           }
+
+          // Notify all subscribers
+          onTokenRefreshed(refreshData.accessToken);
+
+          // Retry original request with new token
+          const retryHeaders = new Headers(fetchOptions.headers);
+          if (fetchOptions.body && !retryHeaders.has("Content-Type")) {
+            if (fetchOptions.body instanceof FormData) {
+              // Don't set Content-Type for FormData
+            } else {
+              retryHeaders.set("Content-Type", "application/json");
+            }
+          }
+          retryHeaders.set(
+            "Authorization",
+            `Bearer ${refreshData.accessToken}`,
+          );
+
+          response = await fetch(url, {
+            ...fetchOptions,
+            headers: retryHeaders,
+            credentials: "include",
+          });
+        } else {
+          throw new Error("Session expired. Please login again.");
         }
-        retryHeaders.set(
-          "Authorization",
-          `Bearer ${refreshResponse.accessToken}`,
-        );
-
-        response = await fetch(url, {
-          ...fetchOptions,
-          headers: retryHeaders,
-          credentials: "include",
-        });
       } catch (refreshError) {
-        // Refresh failed, dispatch logout or handle error
+        // Refresh failed
         console.error("Token refresh failed:", refreshError);
-
-        // You might want to dispatch logout here
-        // store.dispatch(logoutThunk());
-
         throw new Error("Session expired. Please login again.");
       } finally {
         isRefreshing = false;
@@ -155,53 +156,89 @@ export const apiFetch = async (
 // CONVENIENCE METHODS
 // ======================================================
 
-export const apiGet = (url: string, options: ApiFetchOptions = {}) =>
-  apiFetch(url, { ...options, method: "GET" });
+export const apiGet = (
+  url: string,
+  options: ApiFetchOptions = {},
+  getAccessToken?: () => string | null,
+  onTokenRefresh?: (user: any, accessToken: string) => void,
+) =>
+  apiFetch(url, { ...options, method: "GET" }, getAccessToken, onTokenRefresh);
 
 export const apiPost = (
   url: string,
   data?: any,
   options: ApiFetchOptions = {},
+  getAccessToken?: () => string | null,
+  onTokenRefresh?: (user: any, accessToken: string) => void,
 ) =>
-  apiFetch(url, {
-    ...options,
-    method: "POST",
-    body: data
-      ? data instanceof FormData
-        ? data
-        : JSON.stringify(data)
-      : undefined,
-  });
+  apiFetch(
+    url,
+    {
+      ...options,
+      method: "POST",
+      body: data
+        ? data instanceof FormData
+          ? data
+          : JSON.stringify(data)
+        : undefined,
+    },
+    getAccessToken,
+    onTokenRefresh,
+  );
 
 export const apiPut = (
   url: string,
   data?: any,
   options: ApiFetchOptions = {},
+  getAccessToken?: () => string | null,
+  onTokenRefresh?: (user: any, accessToken: string) => void,
 ) =>
-  apiFetch(url, {
-    ...options,
-    method: "PUT",
-    body: data
-      ? data instanceof FormData
-        ? data
-        : JSON.stringify(data)
-      : undefined,
-  });
+  apiFetch(
+    url,
+    {
+      ...options,
+      method: "PUT",
+      body: data
+        ? data instanceof FormData
+          ? data
+          : JSON.stringify(data)
+        : undefined,
+    },
+    getAccessToken,
+    onTokenRefresh,
+  );
 
 export const apiPatch = (
   url: string,
   data?: any,
   options: ApiFetchOptions = {},
+  getAccessToken?: () => string | null,
+  onTokenRefresh?: (user: any, accessToken: string) => void,
 ) =>
-  apiFetch(url, {
-    ...options,
-    method: "PATCH",
-    body: data
-      ? data instanceof FormData
-        ? data
-        : JSON.stringify(data)
-      : undefined,
-  });
+  apiFetch(
+    url,
+    {
+      ...options,
+      method: "PATCH",
+      body: data
+        ? data instanceof FormData
+          ? data
+          : JSON.stringify(data)
+        : undefined,
+    },
+    getAccessToken,
+    onTokenRefresh,
+  );
 
-export const apiDelete = (url: string, options: ApiFetchOptions = {}) =>
-  apiFetch(url, { ...options, method: "DELETE" });
+export const apiDelete = (
+  url: string,
+  options: ApiFetchOptions = {},
+  getAccessToken?: () => string | null,
+  onTokenRefresh?: (user: any, accessToken: string) => void,
+) =>
+  apiFetch(
+    url,
+    { ...options, method: "DELETE" },
+    getAccessToken,
+    onTokenRefresh,
+  );

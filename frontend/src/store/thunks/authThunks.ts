@@ -7,6 +7,8 @@ import {
   LoginPayload,
   RegisterPayload,
 } from "@/services/authService";
+import { RootState } from "../store";
+import { setCredentials } from "../slices/authSlice";
 
 // ======================================================
 // REGISTER
@@ -71,7 +73,13 @@ export const logoutThunk = createAsyncThunk(
 
   async (_, thunkAPI) => {
     try {
-      const response = await authService.logout();
+      const state = thunkAPI.getState() as RootState;
+      const response = await authService.logout(
+        () => state.auth.accessToken,
+        (user, accessToken) => {
+          thunkAPI.dispatch(setCredentials({ user, accessToken }));
+        },
+      );
 
       return response;
     } catch (error: any) {

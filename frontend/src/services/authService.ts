@@ -85,8 +85,17 @@ export const authService = {
   // =========================================
   // LOGOUT
   // =========================================
-  logout: async (): Promise<{ message: string }> => {
-    const response = await apiPost(`${BASE_URL}/logout`);
+  logout: async (
+    getAccessToken?: () => string | null,
+    onTokenRefresh?: (user: any, accessToken: string) => void,
+  ): Promise<{ message: string }> => {
+    const response = await apiPost(
+      `${BASE_URL}/logout`,
+      undefined,
+      {},
+      getAccessToken,
+      onTokenRefresh,
+    );
 
     return handleResponse(response);
   },
