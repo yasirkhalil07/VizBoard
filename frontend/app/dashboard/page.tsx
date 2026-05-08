@@ -1,10 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-// import { AppDispatch, RootState } from '@/store';
-// import { fetchDashboards } from '@/store/slices/dashboardSlice';
-
 import { CreateDashboardCard } from "@/components/custom/CreateDashboardCard";
 import { DashboardCard } from "@/components/custom/DashboardCard";
 import { Skeleton } from "@/components/ui/skeleton";
