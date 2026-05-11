@@ -96,7 +96,7 @@ export const apiFetch = async (
       try {
         // Call refresh endpoint directly
         const refreshResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001"}/api/auth/refresh`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001"}/api/auth/refreshToken`,
           {
             method: "POST",
             headers: {

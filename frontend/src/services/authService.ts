@@ -30,9 +30,12 @@ export interface RegisterResponse {
 
 // Login / Refresh response
 export interface AuthResponse {
-  accessToken: string;
-  user: User;
+  success: boolean;
   message: string;
+  data: {
+    accessToken: string;
+    user: User;
+  };
 }
 
 // ======================================================
@@ -104,7 +107,7 @@ export const authService = {
   // REFRESH TOKEN
   // =========================================
   refreshToken: async (): Promise<AuthResponse> => {
-    const response = await fetch(`${BASE_URL}/refresh`, {
+    const response = await fetch(`${BASE_URL}/refreshToken`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

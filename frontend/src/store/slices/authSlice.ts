@@ -103,8 +103,8 @@ const authSlice = createSlice({
       .addCase(loginThunk.fulfilled, (state, action) => {
         state.loading = false;
 
-        state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
+        state.user = action.payload.data.user;
+        state.accessToken = action.payload.data.accessToken;
 
         state.isAuthenticated = true;
       })
@@ -132,8 +132,8 @@ const authSlice = createSlice({
       .addCase(refreshTokenThunk.fulfilled, (state, action) => {
         state.loading = false;
 
-        state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
+        state.user = action.payload.data.user;
+        state.accessToken = action.payload.data.accessToken;
 
         state.isAuthenticated = true;
         state.initialized = true;

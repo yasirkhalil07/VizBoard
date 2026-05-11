@@ -39,6 +39,14 @@ export const loginThunk = createAsyncThunk(
     try {
       const response = await authService.login(payload);
 
+      console.log("Login response:", response);
+      // store accesstoken in redux state
+      thunkAPI.dispatch(
+        setCredentials({
+          user: response.data.user,
+          accessToken: response.data.accessToken,
+        }),
+      );
       return response;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message || "Login failed");

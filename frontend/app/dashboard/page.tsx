@@ -1,26 +1,38 @@
 "use client";
 
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { getDashboardsThunk } from "@/store/thunks/dashboardThunks";
 import { CreateDashboardCard } from "@/components/custom/CreateDashboardCard";
 import { DashboardCard } from "@/components/custom/DashboardCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ConnectionModal } from "@/components/custom/ConnectionModal";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+
 export default function DashboardHomePage() {
-  // const dispatch = useDispatch<AppDispatch>();
-  // const { items, loading } = useSelector((state: RootState) => state.dashboards);
+  const dispatch = useDispatch<AppDispatch>();
+  const { dashboards, loading, error } = useSelector(
+    (state: RootState) => state.dashboard,
+  );
+  const { isAuthenticated, accessToken } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
-  // useEffect(() => {
-  //   dispatch(fetchDashboards());
-  // }, [dispatch]);
+  useEffect(() => {
+    console.log("Dashboard auth state:", { isAuthenticated, accessToken });
 
-  // dummy data for now
-  const items = [
-    { id: 1, name: "Sales Dashboard", updatedAt: "2025-10-15" },
-    { id: 2, name: "Marketing Analytics", updatedAt: "2025-10-14" },
-    { id: 3, name: "User Engagement", updatedAt: "2025-10-13" },
-    { id: 4, name: "Revenue Trends", updatedAt: "2025-10-12" },
-  ];
-  const loading = false;
+    // Only fetch dashboards when we have an access token
+    if (isAuthenticated && accessToken) {
+      console.log("Fetching dashboards...");
+      dispatch(getDashboardsThunk());
+    } else {
+      console.log("Not fetching dashboards - missing auth:", {
+        isAuthenticated,
+        accessToken,
+      });
+    }
+  }, [dispatch, isAuthenticated, accessToken]);
 
   return (
     <ProtectedRoute>
@@ -52,11 +64,11 @@ export default function DashboardHomePage() {
 
           {/* Data List */}
           {!loading &&
-            items.map((dashboard) => (
+            dashboards.map((dashboard) => (
               <DashboardCard
                 key={dashboard.id}
                 name={dashboard.name}
-                updatedAt={dashboard.updatedAt}
+                updatedAt={dashboard.updated_at}
               />
             ))}
         </div>
