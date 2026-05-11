@@ -48,7 +48,9 @@ export default function DashboardHomePage() {
               </p>
             </div>
             {/* to be added next */}
-            <ConnectionModal />
+            <div>
+              <ConnectionModal />
+            </div>
           </div>
         </header>
 
@@ -67,6 +69,7 @@ export default function DashboardHomePage() {
             dashboards.map((dashboard) => (
               <DashboardCard
                 key={dashboard.id}
+                id={dashboard.id}
                 name={dashboard.name}
                 updatedAt={dashboard.updated_at}
               />

@@ -9,8 +9,9 @@ export interface Dashboard {
   id: number;
   name: string;
   description?: string;
-  createdAt: string;
-  updatedAt: string;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateDashboardPayload {

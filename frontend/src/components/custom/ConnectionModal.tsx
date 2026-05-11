@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Database, Plus, Server, Lock, Globe, Hash } from "lucide-react";
+import {
+  Database,
+  Plus,
+  Server,
+  Lock,
+  Globe,
+  Hash,
+  Sparkles,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -27,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export function ConnectionModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +63,6 @@ export function ConnectionModal() {
 
   const onSubmit = (data: ConnectionFormValues) => {
     console.log("Submitting Connection:", data);
-    // Future Thunk call goes here
     reset();
     setIsOpen(false);
   };
@@ -62,53 +70,75 @@ export function ConnectionModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700 gap-2 shadow-md transition-all">
-          <Plus className="w-4 h-4" />
+        <Button className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white font-bold px-6 py-5 rounded-xl shadow-lg shadow-blue-600/20 gap-2 transition-all active:scale-95">
+          <Plus className="w-5 h-5" />
           Add Connection
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden border-none shadow-2xl">
-        <div className="bg-blue-600 p-6 text-white">
-          <DialogHeader>
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+      {/* <DialogContent className="sm:max-w-[580px] p-0 overflow-hidden border-none shadow-2xl rounded-3xl"> */}
+      <DialogContent
+        className="
+    sm:max-w-[580px]
+    p-0
+    overflow-hidden
+    rounded-3xl
+    border border-slate-200 dark:border-slate-800
+    shadow-2xl
+    [&>button]:z-50
+  "
+      >
+        {/* VizBoard Header Branding */}
+        <div className="bg-[#f0f7ff] dark:bg-blue-950/30 p-3 border-b border-blue-100 dark:border-slate-800 relative">
+          <div className="absolute top-2 right-7 opacity-10">
+            <Database className="w-18 h-18 text-blue-600" />
+          </div>
+
+          <DialogHeader className="relative z-10">
+            <div className="flex items-center gap-4">
+              <div className="bg-blue-600 p-3 rounded-2xl shadow-xl shadow-blue-600/30">
                 <Database className="w-6 h-6 text-white" />
               </div>
-              <DialogTitle className="text-2xl text-white">
-                Database Connection
-              </DialogTitle>
+              <div className="space-y-1">
+                <DialogTitle className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                  Database Connection
+                </DialogTitle>
+                <DialogDescription className="text-slate-500 dark:text-slate-400 font-medium">
+                  Connect your external data sources to build dashboards.
+                </DialogDescription>
+              </div>
             </div>
-            <DialogDescription className="text-blue-100 mt-2">
-              Enter your database credentials to link your data to VizBoard.
-            </DialogDescription>
           </DialogHeader>
         </div>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="p-6 space-y-6 bg-white"
+          className="p-8 space-y-6 bg-white dark:bg-slate-950"
         >
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-            {/* Connection Name - Full Width */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+            {/* Connection Name */}
             <div className="col-span-2 space-y-2">
-              <Label htmlFor="connectionName">Connection Name</Label>
-              <Input
-                id="connectionName"
-                placeholder="e.g. Production MySQL"
-                {...register("connectionName")}
-                className={errors.connectionName ? "border-red-500" : ""}
-              />
-              {errors.connectionName && (
-                <p className="text-xs text-red-500 font-medium">
-                  {errors.connectionName.message}
-                </p>
-              )}
+              <Label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
+                Connection Name
+              </Label>
+              <div className="relative">
+                <Sparkles className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
+                <Input
+                  placeholder="e.g. Production MySQL"
+                  {...register("connectionName")}
+                  className={cn(
+                    "pl-10 h-12 rounded-xl bg-slate-50 dark:bg-slate-900 border-none focus-visible:ring-2 focus-visible:ring-blue-500/20 font-medium",
+                    errors.connectionName && "ring-2 ring-red-500/20",
+                  )}
+                />
+              </div>
             </div>
 
             {/* DB Type */}
             <div className="space-y-2">
-              <Label>Database Type</Label>
+              <Label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
+                Type
+              </Label>
               <Select
                 defaultValue={selectedDbType}
                 onValueChange={(val: "mysql" | "postgres") => {
@@ -116,10 +146,10 @@ export function ConnectionModal() {
                   setValue("port", val === "mysql" ? 3306 : 5432);
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-12 rounded-xl bg-slate-50 dark:bg-slate-900 border-none">
                   <SelectValue placeholder="Select DB" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl border-slate-200 dark:border-slate-800">
                   <SelectItem value="mysql">MySQL</SelectItem>
                   <SelectItem value="postgres">PostgreSQL</SelectItem>
                 </SelectContent>
@@ -128,76 +158,72 @@ export function ConnectionModal() {
 
             {/* Host */}
             <div className="space-y-2">
-              <Label htmlFor="host" className="flex items-center gap-2">
-                <Globe className="w-3 h-3" /> Host
+              <Label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
+                Host
               </Label>
-              <Input id="host" {...register("host")} />
-              {errors.host && (
-                <p className="text-xs text-red-500 font-medium">
-                  {errors.host.message}
-                </p>
-              )}
+              <Input
+                className="h-12 rounded-xl bg-slate-50 dark:bg-slate-900 border-none"
+                {...register("host")}
+              />
             </div>
 
-            {/* Port */}
+            {/* Port & DB Name */}
             <div className="space-y-2">
-              <Label htmlFor="port" className="flex items-center gap-2">
-                <Hash className="w-3 h-3" /> Port
+              <Label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
+                Port
               </Label>
-              <Input id="port" type="number" {...register("port")} />
+              <Input
+                type="number"
+                className="h-12 rounded-xl bg-slate-50 dark:bg-slate-900 border-none"
+                {...register("port")}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
+                Database
+              </Label>
+              <Input
+                className="h-12 rounded-xl bg-slate-50 dark:bg-slate-900 border-none"
+                {...register("databaseName")}
+              />
             </div>
 
-            {/* Database Name */}
+            {/* Username & Password */}
             <div className="space-y-2">
-              <Label htmlFor="databaseName" className="flex items-center gap-2">
-                <Server className="w-3 h-3" /> DB Name
+              <Label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
+                Username
               </Label>
-              <Input id="databaseName" {...register("databaseName")} />
-              {errors.databaseName && (
-                <p className="text-xs text-red-500 font-medium">
-                  {errors.databaseName.message}
-                </p>
-              )}
+              <Input
+                className="h-12 rounded-xl bg-slate-50 dark:bg-slate-900 border-none"
+                {...register("username")}
+              />
             </div>
-
-            {/* Username */}
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" {...register("username")} />
-              {errors.username && (
-                <p className="text-xs text-red-500 font-medium">
-                  {errors.username.message}
-                </p>
-              )}
-            </div>
-
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password" className="flex items-center gap-2">
-                <Lock className="w-3 h-3" /> Password
+              <Label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">
+                Password
               </Label>
-              <Input id="password" type="password" {...register("password")} />
-              {errors.password && (
-                <p className="text-xs text-red-500 font-medium">
-                  {errors.password.message}
-                </p>
-              )}
+              <Input
+                type="password"
+                className="h-12 rounded-xl bg-slate-50 dark:bg-slate-900 border-none"
+                {...register("password")}
+              />
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t">
+          <div className="flex justify-end items-center gap-4 pt-6 mt-4 border-t border-slate-100 dark:border-slate-900">
             <Button
               type="button"
               variant="ghost"
+              className="font-bold cursor-pointer text-slate-500 hover:text-slate-900 dark:hover:text-white"
               onClick={() => setIsOpen(false)}
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 px-10"
+              className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-blue-600/20 transition-all"
             >
-              Test & Save
+              Test & Save Connection
             </Button>
           </div>
         </form>

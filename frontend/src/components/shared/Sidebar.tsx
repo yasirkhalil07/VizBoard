@@ -10,7 +10,7 @@ import {
   Share2,
   BarChart3,
 } from "lucide-react";
-import { cn } from "@/src/lib/utils";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Dashboards", href: "/", icon: LayoutDashboard },
@@ -23,7 +23,7 @@ export const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 border-r bg-white h-screen sticky top-0 flex flex-col">
+    <aside className="w-64 border-r bg-gradient-to-b from-blue-50 to-indigo-50 h-screen sticky top-0 flex flex-col">
       <div className="p-6 flex items-center gap-3">
         <div className="bg-blue-600 p-2 rounded-lg">
           <BarChart3 className="text-white w-6 h-6" />
@@ -43,7 +43,7 @@ export const Sidebar = () => {
               className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-blue-50 text-blue-700"
+                  ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
               )}
             >
