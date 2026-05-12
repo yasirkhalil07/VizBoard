@@ -36,9 +36,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { useDispatch } from "react-redux";
+import {
+  testConnectionRawThunk,
+  createConnectionThunk,
+} from "@/store/thunks/dbConnectionThunks";
+import { showToast } from "@/lib/toast";
+import { Loader2 } from "lucide-react";
+import { AppDispatch } from "@/store/store";
+
+interface TestConnectionResponse {
+  message: string;
+}
 
 export function ConnectionModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isTesting, setIsTesting] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     register,
@@ -61,10 +76,62 @@ export function ConnectionModal() {
 
   const selectedDbType = watch("dbType");
 
-  const onSubmit = (data: ConnectionFormValues) => {
-    console.log("Submitting Connection:", data);
-    reset();
-    setIsOpen(false);
+  const onSubmit = async (data: ConnectionFormValues) => {
+    setIsTesting(true);
+
+    try {
+      // Step 1: Test connection with raw credentials
+      const testPayload = {
+        dbType: data.dbType,
+        host: data.host,
+        port: data.port,
+        username: data.username,
+        password: data.password,
+        databaseName: data.databaseName,
+      };
+
+      const testResult = (await dispatch(
+        testConnectionRawThunk(testPayload),
+      ).unwrap()) as TestConnectionResponse;
+
+      // Check if test was successful
+      if (testResult.message === "Connection successful") {
+        showToast.success("Connection test successful! Saving connection...");
+
+        // Step 2: Create connection if test was successful
+        setIsCreating(true);
+        const createPayload = {
+          connectionName: data.connectionName,
+          dbType: data.dbType,
+          host: data.host,
+          port: data.port,
+          username: data.username,
+          password: data.password,
+          databaseName: data.databaseName,
+        };
+
+        const createResult = await dispatch(
+          createConnectionThunk(createPayload),
+        ).unwrap();
+        console.log("Create result:", createResult);
+
+        showToast.success("Connection saved successfully!");
+        reset();
+        setIsOpen(false);
+      } else {
+        showToast.error(
+          "Connection test failed. Please check your credentials.",
+        );
+      }
+    } catch (error: any) {
+      console.error("Connection error:", error);
+      showToast.error(
+        error.message || "Connection failed. Please check your credentials.",
+      );
+    } finally {
+      setIsTesting(false);
+      setIsCreating(false);
+    }
   };
 
   return (
@@ -221,9 +288,25 @@ export function ConnectionModal() {
             </Button>
             <Button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-blue-600/20 transition-all"
+              disabled={isTesting || isCreating}
+              className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-blue-600/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Test & Save Connection
+              {isTesting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Testing Connection...
+                </>
+              ) : isCreating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving Connection...
+                </>
+              ) : (
+                <>
+                  <Database className="mr-2 h-4 w-4" />
+                  Test & Save Connection
+                </>
+              )}
             </Button>
           </div>
         </form>

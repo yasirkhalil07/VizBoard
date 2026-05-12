@@ -40,8 +40,8 @@ export const DashboardCard = ({ id, name, updatedAt }: DashboardCardProps) => {
       </CardContent>
 
       <CardFooter className="p-4 flex justify-between items-center bg-white dark:bg-slate-950">
-        <div className="space-y-1">
-          <h3 className="font-bold text-sm truncate w-40 text-slate-900 dark:text-slate-100 tracking-tight">
+        <div className="space-y-1 flex-1 min-w-0 mr-3">
+          <h3 className="font-bold text-sm truncate text-slate-900 dark:text-slate-100 tracking-tight">
             {name}
           </h3>
           <p className="text-[11px] text-slate-500 dark:text-slate-500 font-semibold uppercase tracking-wider">

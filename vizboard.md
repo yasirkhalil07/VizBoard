@@ -26,13 +26,48 @@ It allows users (Admins & Clients) to:
   - Admin → Can create dashboards, connections, charts
   - Client → Can view assigned dashboards
 
+#### Enhanced Authentication:
+
+✅ **Token Management**: Automatic token refresh on expiry
+✅ **Service Integration**: All API calls include authentication
+✅ **Error Handling**: Proper logout on token failure
+✅ **Type Safety**: TypeScript interfaces for all responses
+
+#### Authentication Flow:
+
+1. **Login**: Returns access token + sets refresh token cookie
+2. **API Calls**: Access token in Authorization header
+3. **Refresh**: Automatic token refresh using cookie
+4. **Logout**: Clears refresh token and access token
+
 ---
 
 ### 📁 Dashboard System
 
 - Users land on a dashboard home page
-- View existing dashboards
-- Create new dashboards
+- View existing dashboards with card layout
+- Create new dashboards with modal interface
+
+#### Dashboard Features:
+
+✅ **Centralized State**: Redux Toolkit manages dashboard state
+✅ **No Prop Drilling**: Actions dispatched directly from components
+✅ **Update/Delete**: Inline dropdown with three-dot menu
+✅ **Responsive Cards**: Optimized layout with proper spacing
+✅ **Loading States**: Toast notifications for all operations
+
+#### Components:
+
+- **DashboardCard**: Card display with hover effects and actions
+- **DashboardActionsDropdown**: Three-dot menu with update/delete options
+- **UpdateDashboardModal**: Dedicated modal for editing dashboards
+- **CreateDashboardModal**: Modal for creating new dashboards
+
+#### Redux Architecture:
+
+- **dashboardSlice**: Centralized state management
+- **dashboardThunks**: Async operations (CRUD)
+- **Error Handling**: Proper error states and messages
 
 ---
 
@@ -47,11 +82,26 @@ Users can connect external databases:
 
 - Connection Name (unique)
 - Host
+- Port
 - Username
 - Password
 - Database Name
 
-✅ Connection is validated before saving
+#### Connection Flow:
+
+✅ **Test-Then-Create**: Connection is first tested with raw credentials
+✅ **Validation**: Only saves if test returns "Connection successful"
+✅ **Authentication**: All endpoints use JWT tokens with refresh support
+✅ **Error Handling**: Proper loading states and toast notifications
+
+#### API Endpoints:
+
+- `POST /api/connections/test` - Test raw connection
+- `POST /api/connections` - Create connection
+- `PUT /api/connections/:id` - Update connection
+- `DELETE /api/connections/:id` - Delete connection
+- `GET /api/connections` - List connections
+- `GET /api/connections/:id` - Get single connection
 
 ---
 
@@ -691,6 +741,36 @@ CREATE TABLE refresh_tokens (
 - Separation of concerns
 - Server vs client state management
 - Dynamic schema handling
+
+### Recent Implementation Enhancements:
+
+#### Redux State Management:
+
+- **Centralized Store**: Single source of truth for UI state
+- **Async Thunks**: Proper async operation handling
+- **Error Boundaries**: Comprehensive error handling
+- **Type Safety**: Full TypeScript integration
+
+#### Service Layer Architecture:
+
+- **Authentication**: Token-based API calls with refresh
+- **Response Parsing**: Consistent JSON handling across services
+- **Error Handling**: Standardized error responses
+- **Type Safety**: Proper interfaces for all API responses
+
+#### Component Architecture:
+
+- **Reusable Components**: Modular, composable UI elements
+- **State Management**: Local state + Redux integration
+- **User Experience**: Loading states, toast notifications
+- **Responsive Design**: Adaptive layouts for different screen sizes
+
+#### Database Connection Flow:
+
+- **Test-Then-Create**: Validates before persistence
+- **Security**: Credentials never stored in frontend state
+- **Feedback**: Real-time connection status updates
+- **Error Recovery**: Clear error messages and recovery options
 
 ---
 

@@ -1,13 +1,28 @@
 // dbConnection.thunks.ts
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { dbConnectionService } from "@/services/dbConnectionService";
+import { RootState } from "@/store/store";
+import { setCredentials } from "@/store/slices/authSlice";
 
 // create connection
 export const createConnectionThunk = createAsyncThunk(
   "dbConnection/create",
   async (payload: any, thunkAPI) => {
     try {
-      const response = await dbConnectionService.createConnection(payload);
+      const state = thunkAPI.getState() as RootState;
+
+      // Check if we have a valid access token
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
+      const response = await dbConnectionService.createConnection(
+        payload,
+        () => state.auth.accessToken,
+        (user, accessToken) => {
+          thunkAPI.dispatch(setCredentials({ user, accessToken }));
+        },
+      );
       return response;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
@@ -25,9 +40,50 @@ export const testConnectionThunk = createAsyncThunk(
     thunkAPI,
   ) => {
     try {
+      const state = thunkAPI.getState() as RootState;
+
+      // Check if we have a valid access token
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
       const response = await dbConnectionService.testConnection(
         connectionId,
         payload,
+        () => state.auth.accessToken,
+        (user, accessToken) => {
+          thunkAPI.dispatch(setCredentials({ user, accessToken }));
+        },
+      );
+      return response;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        error.message || "Test connection failed",
+      );
+    }
+  },
+);
+
+// Raw Test Connection
+export const testConnectionRawThunk = createAsyncThunk(
+  "dbConnection/testRaw",
+  async (payload: any, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState() as RootState;
+
+      // Check if we have a valid access token
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
+      console.log("Testing connection with token:", state.auth.accessToken);
+
+      const response = await dbConnectionService.testConnectionRaw(
+        payload,
+        () => state.auth.accessToken,
+        (user, accessToken) => {
+          thunkAPI.dispatch(setCredentials({ user, accessToken }));
+        },
       );
       return response;
     } catch (error: any) {
@@ -46,9 +102,20 @@ export const updateConnectionThunk = createAsyncThunk(
     thunkAPI,
   ) => {
     try {
+      const state = thunkAPI.getState() as RootState;
+
+      // Check if we have a valid access token
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
       const response = await dbConnectionService.updateConnection(
         connectionId,
         payload,
+        () => state.auth.accessToken,
+        (user, accessToken) => {
+          thunkAPI.dispatch(setCredentials({ user, accessToken }));
+        },
       );
       return response;
     } catch (error: any) {
@@ -64,7 +131,20 @@ export const deleteConnectionThunk = createAsyncThunk(
   "dbConnection/delete",
   async (connectionId: number, thunkAPI) => {
     try {
-      const response = await dbConnectionService.deleteConnection(connectionId);
+      const state = thunkAPI.getState() as RootState;
+
+      // Check if we have a valid access token
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
+      const response = await dbConnectionService.deleteConnection(
+        connectionId,
+        () => state.auth.accessToken,
+        (user, accessToken) => {
+          thunkAPI.dispatch(setCredentials({ user, accessToken }));
+        },
+      );
       return response;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
