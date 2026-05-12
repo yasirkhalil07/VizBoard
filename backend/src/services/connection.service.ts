@@ -165,6 +165,26 @@ export const testConnectionService = async (
   }
 };
 
+// ── Test with raw credentials (no saved record) ────────────
+export const testConnectionRawService = async (
+  data: any,
+): Promise<TestResult> => {
+  try {
+    await pingConnection({
+      dbType: data.dbType as "mysql" | "postgres",
+      host: data.host,
+      port: data.port,
+      username: data.username,
+      password: data.password,
+      databaseName: data.databaseName,
+    });
+    return { success: true };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return { success: false, error: message };
+  }
+};
+
 // ── Schema introspection ───────────────────────────────────
 export const getTablesService = async (
   connectionId: number,

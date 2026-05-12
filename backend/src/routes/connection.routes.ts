@@ -13,6 +13,9 @@ router.put("/:id", connectionController.updateConnection);
 router.delete("/:id", connectionController.deleteConnection);
 
 // ── Test ───────────────────────────────────────────────────
+// IMPORTANT: /test must be defined BEFORE /:id/test
+// otherwise Express would try to match "test" as an :id param
+router.post("/test", connectionController.testConnectionRaw); // raw credentials nosaved record
 router.post("/:id/test", connectionController.testConnection);
 
 // ── Schema introspection ───────────────────────────────────

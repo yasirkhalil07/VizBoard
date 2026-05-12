@@ -3,6 +3,7 @@ import { connectionService } from "../services";
 import {
   createConnectionSchema,
   updateConnectionSchema,
+  testConnectionRawSchema,
 } from "../validators/connectionValidators";
 
 export const getConnections = async (req: Request, res: Response) => {
@@ -105,6 +106,35 @@ export const testConnection = async (req: Request, res: Response) => {
         .status(404)
         .json({ message: "Connection not found or access denied" });
     }
+
+    if (!result.success) {
+      return res
+        .status(400)
+        .json({ message: "Connection test failed", error: result.error });
+    }
+
+    res.json({ message: "Connection successful" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to test connection" });
+  }
+};
+
+// ── Test with raw credentials ──────────────────────────────
+// Used by the frontend "Test Connection" button BEFORE saving.
+// Takes the same payload as createConnection (minus connectionName).
+// On success → frontend calls POST /api/connections to save it.
+export const testConnectionRaw = async (req: Request, res: Response) => {
+  try {
+    const parsed = testConnectionRawSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res
+        .status(400)
+        .json({ message: "Validation failed", errors: parsed.error.flatten() });
+    }
+
+    const result = await connectionService.testConnectionRawService(
+      parsed.data,
+    );
 
     if (!result.success) {
       return res

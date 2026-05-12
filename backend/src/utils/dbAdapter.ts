@@ -19,26 +19,36 @@ export interface ColumnInfo {
 // ── Attempt a live connection and immediately close it ─────
 export async function pingConnection(conn: DbConnection): Promise<void> {
   if (conn.dbType === "mysql") {
-    const connection = await mysql.createConnection({
-      host: conn.host,
-      port: conn.port,
-      user: conn.username,
-      password: conn.password,
-      database: conn.databaseName,
-      connectTimeout: 5000,
-    });
-    await connection.end();
+    try {
+      const connection = await mysql.createConnection({
+        host: conn.host,
+        port: conn.port,
+        user: conn.username,
+        password: conn.password,
+        database: conn.databaseName,
+        connectTimeout: 5000,
+      });
+      await connection.end();
+    } catch (error) {
+      console.error("MySQL connection error:", error);
+      throw error;
+    }
   } else {
-    const client = new PgClient({
-      host: conn.host,
-      port: conn.port,
-      user: conn.username,
-      password: conn.password,
-      database: conn.databaseName,
-      connectionTimeoutMillis: 5000,
-    });
-    await client.connect();
-    await client.end();
+    try {
+      const client = new PgClient({
+        host: conn.host,
+        port: conn.port,
+        user: conn.username,
+        password: conn.password,
+        database: conn.databaseName,
+        connectionTimeoutMillis: 5000,
+      });
+      await client.connect();
+      await client.end();
+    } catch (error) {
+      console.error("PostgreSQL connection error:", error);
+      throw error;
+    }
   }
 }
 

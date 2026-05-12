@@ -53,6 +53,22 @@ export const updateConnectionSchema = z
   .refine((data) => Object.values(data).some((v) => v !== undefined), {
     message: "At least one field must be provided",
   });
+// ── Test with raw credentials (no saved record) ────────────
+// Used by the "Test Connection" button before saving.
+export const testConnectionRawSchema = z.object({
+  dbType: dbTypeEnum,
 
+  host: z.string().min(1, "Host is required").max(253),
+
+  port: z.number().int().min(1).max(65535).default(3306),
+
+  username: z.string().min(1, "Username is required").max(100),
+
+  password: z.string().min(1, "Password is required"),
+
+  databaseName: z.string().min(1, "Database name is required").max(100),
+});
+
+export type TestConnectionRawInput = z.infer<typeof testConnectionRawSchema>;
 export type CreateConnectionInput = z.infer<typeof createConnectionSchema>;
 export type UpdateConnectionInput = z.infer<typeof updateConnectionSchema>;
