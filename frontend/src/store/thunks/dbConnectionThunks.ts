@@ -154,6 +154,58 @@ export const deleteConnectionThunk = createAsyncThunk(
   },
 );
 
+// get tables thunk
+export const getTablesThunk = createAsyncThunk(
+  "dbConnection/getTables",
+  async (connectionId: number, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState() as RootState;
+
+      // Check if we have a valid access token
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
+      const response = await dbConnectionService.getTables(
+        connectionId,
+        () => state.auth.accessToken,
+        (user: any, accessToken: string) => {
+          thunkAPI.dispatch(setCredentials({ user, accessToken }));
+        },
+      );
+      return response;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message || "Get tables failed");
+    }
+  },
+);
+
+// get columns thunk
+export const getColumnsThunk = createAsyncThunk(
+  "dbConnection/getColumns",
+  async (connectionId: number, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState() as RootState;
+
+      // Check if we have a valid access token
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
+      const response = await dbConnectionService.getColumns(
+        connectionId,
+        () => state.auth.accessToken,
+        (user: any, accessToken: string) => {
+          thunkAPI.dispatch(setCredentials({ user, accessToken }));
+        },
+      );
+      return response;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message || "Get columns failed");
+    }
+  },
+);
+
 // // get all connections
 // export const getAllConnectionsThunk = createAsyncThunk(
 //   "dbConnection/getAll",

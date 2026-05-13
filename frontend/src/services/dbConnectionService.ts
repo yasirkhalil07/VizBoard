@@ -129,4 +129,34 @@ export const dbConnectionService = {
     );
     return handleResponse(response);
   },
+  // get tables http://localhost:3001/api/connections/1/tables
+  getTables: async (
+    connectionId: number,
+    getAccessToken?: () => string | null,
+    onTokenRefresh?: (user: any, accessToken: string) => void,
+  ) => {
+    const response = await apiGet(
+      `${BASE_URL}/${connectionId}/tables`,
+      {},
+      getAccessToken,
+      onTokenRefresh,
+    );
+    return handleResponse(response);
+  },
+
+  // get columns http://localhost:3001/api/connections/1/tables/column_name
+  getColumns: async (
+    connectionId: number,
+    tableName: string,
+    getAccessToken?: () => string | null,
+    onTokenRefresh?: (user: any, accessToken: string) => void,
+  ) => {
+    const response = await apiGet(
+      `${BASE_URL}/${connectionId}/tables/${tableName}`,
+      {},
+      getAccessToken,
+      onTokenRefresh,
+    );
+    return handleResponse(response);
+  },
 };

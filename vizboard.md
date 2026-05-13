@@ -47,6 +47,7 @@ It allows users (Admins & Clients) to:
 - Users land on a dashboard home page
 - View existing dashboards with card layout
 - Create new dashboards with modal interface
+- **Project Routes**: Dynamic routes `/dashboard/[id]` for individual dashboard management
 
 #### Dashboard Features:
 
@@ -55,6 +56,7 @@ It allows users (Admins & Clients) to:
 ✅ **Update/Delete**: Inline dropdown with three-dot menu
 ✅ **Responsive Cards**: Optimized layout with proper spacing
 ✅ **Loading States**: Toast notifications for all operations
+✅ **Project Pages**: Dedicated routes for dashboard configuration and management
 
 #### Components:
 
@@ -62,12 +64,20 @@ It allows users (Admins & Clients) to:
 - **DashboardActionsDropdown**: Three-dot menu with update/delete options
 - **UpdateDashboardModal**: Dedicated modal for editing dashboards
 - **CreateDashboardModal**: Modal for creating new dashboards
+- **DashboardProjectPage**: Full-page interface for dashboard management
 
 #### Redux Architecture:
 
 - **dashboardSlice**: Centralized state management
 - **dashboardThunks**: Async operations (CRUD)
 - **Error Handling**: Proper error states and messages
+
+#### Layout Features:
+
+✅ **Collapsed Sidebar**: Project pages start with sidebar collapsed for maximum workspace
+✅ **Maximum Content**: Full-width dashboard area for charts and configurations
+✅ **User Control**: Manual toggle to expand sidebar when needed
+✅ **Responsive Design**: Maintains mobile responsiveness while optimizing desktop experience
 
 ---
 
