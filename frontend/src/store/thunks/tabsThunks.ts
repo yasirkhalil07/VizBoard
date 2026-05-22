@@ -59,6 +59,10 @@ export const createTabThunk = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
 
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
       const response = await tabsService.createTab(
         dashboardId,
         payload,
@@ -92,6 +96,10 @@ export const updateTabThunk = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
 
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
       const response = await tabsService.updateTab(
         dashboardId,
         tabId,
@@ -124,6 +132,10 @@ export const deleteTabThunk = createAsyncThunk(
   async ({ dashboardId, tabId }: DeleteTabThunkPayload, thunkAPI) => {
     try {
       const state = thunkAPI.getState() as RootState;
+
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
 
       const response = await tabsService.deleteTab(
         dashboardId,

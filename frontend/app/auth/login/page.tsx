@@ -36,14 +36,23 @@ export default function LoginPage() {
     },
   });
 
-  // Note: Redirect is handled by PublicRoute wrapper
-
-  // Show error toast when error occurs
+  // Handle error toast
   useEffect(() => {
     if (error) {
       showToast.error(error);
     }
   }, [error]);
+
+  // Handle redirect after successful login - keep loader visible during redirect
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Small delay to ensure loader is visible during transition
+      const timer = setTimeout(() => {
+        router.push("/dashboard");
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated, router]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {

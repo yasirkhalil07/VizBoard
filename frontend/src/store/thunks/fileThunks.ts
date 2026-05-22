@@ -49,6 +49,10 @@ export const uploadFileThunk = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
 
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
       const response = await fileService.uploadFile(
         file,
         () => state.auth.accessToken,
@@ -74,6 +78,10 @@ export const deleteFileThunk = createAsyncThunk(
   async (fileId: number, thunkAPI) => {
     try {
       const state = thunkAPI.getState() as RootState;
+
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
 
       const response = await fileService.deleteFile(
         fileId,

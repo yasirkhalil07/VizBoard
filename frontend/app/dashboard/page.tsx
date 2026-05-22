@@ -6,7 +6,6 @@ import { AppDispatch, RootState } from "@/store/store";
 import { getDashboardsThunk } from "@/store/thunks/dashboardThunks";
 import { CreateDashboardCard } from "@/components/custom/CreateDashboardCard";
 import { DashboardCard } from "@/components/custom/DashboardCard";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ConnectionModal } from "@/components/custom/ConnectionModal";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
@@ -57,12 +56,6 @@ export default function DashboardHomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {/* Always show Create button first */}
           <CreateDashboardCard />
-
-          {/* Loading State */}
-          {loading &&
-            Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-64 w-full rounded-xl" />
-            ))}
 
           {/* Data List */}
           {!loading &&

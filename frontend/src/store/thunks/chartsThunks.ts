@@ -63,6 +63,10 @@ export const createChartThunk = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
 
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
       const response = await chartsService.createChart(
         tabId,
         payload,
@@ -97,6 +101,10 @@ export const updateChartThunk = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
 
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
       const response = await chartsService.updateChart(
         chartId,
         payload,
@@ -125,6 +133,10 @@ export const deleteChartThunk = createAsyncThunk(
   async (chartId: number, thunkAPI) => {
     try {
       const state = thunkAPI.getState() as RootState;
+
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
 
       const response = await chartsService.deleteChart(
         chartId,
@@ -198,6 +210,10 @@ export const attachDataSourceThunk = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
 
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
+
       const response = await chartsService.attachDataSource(
         chartId,
         payload,
@@ -231,6 +247,10 @@ export const updateDataSourceThunk = createAsyncThunk(
   async ({ chartId, payload }: UpdateDataSourceThunkPayload, thunkAPI) => {
     try {
       const state = thunkAPI.getState() as RootState;
+
+      if (!state.auth.accessToken) {
+        throw new Error("No access token available. Please login again.");
+      }
 
       const response = await chartsService.updateDataSource(
         chartId,

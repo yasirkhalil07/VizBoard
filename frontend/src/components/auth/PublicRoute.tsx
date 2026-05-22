@@ -31,7 +31,12 @@ export default function PublicRoute({
       return;
     }
 
-    // If already authenticated, redirect to dashboard or callback URL
+    // If still loading (login/register in progress), wait for it to complete
+    if (loading) {
+      return;
+    }
+
+    // If already authenticated and not loading, redirect to dashboard or callback URL
     if (isAuthenticated) {
       const callbackUrl = searchParams.get("callbackUrl");
       const redirectUrl = callbackUrl || redirectTo;
@@ -41,7 +46,7 @@ export default function PublicRoute({
 
     // Auth check complete
     setIsChecking(false);
-  }, [isAuthenticated, initialized, router, redirectTo, searchParams]);
+  }, [isAuthenticated, initialized, loading, router, redirectTo, searchParams]);
 
   // Show loading spinner while checking auth state
   if (isChecking || loading) {

@@ -15,10 +15,12 @@ export interface Tab {
 
 export interface CreateTabPayload {
   name: string;
+  orderIndex?: number;
 }
 
 export interface UpdateTabPayload {
   name?: string;
+  orderIndex?: number;
 }
 
 export interface TabResponse {

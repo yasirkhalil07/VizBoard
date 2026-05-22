@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 import { refreshTokenThunk } from "@/store/thunks/authThunks";
 import { setInitialized } from "@/store/slices/authSlice";
 
@@ -12,6 +12,9 @@ interface AuthInitializerProps {
 
 export default function AuthInitializer({ children }: AuthInitializerProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const { loading, initialized } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   // useEffect(() => {
   //   // Only attempt to refresh token if we might have an existing session
@@ -72,5 +75,6 @@ export default function AuthInitializer({ children }: AuthInitializerProps) {
 
     init();
   }, [dispatch]);
+
   return <>{children}</>;
 }
